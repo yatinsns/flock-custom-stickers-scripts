@@ -37,7 +37,8 @@ def download_stickers_from_parsed_info(parsed_info)
   parsed_info.each do |key, value|
     puts "#{key} (#{value.count})"
     dir_name = key.gsub(' ', '-')
-    `mkdir ../stickers/#{dir_name}`
+    dir_path = "../stickers/#{dir_name}"
+    `mkdir -p #{dir_path}` unless File.directory? dir_path
     index = 0
     value.each do |url|
       `curl #{url} > ../stickers/#{dir_name}/#{index}.png`
