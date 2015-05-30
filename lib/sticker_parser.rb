@@ -46,8 +46,17 @@ def download_stickers_from_parsed_info(parsed_info)
   end
 end
 
+def save_names_from_parsed_info(parsed_info, path)
+  File.open(path, "w+") do |f|
+    parsed_info.each do |key, value|
+      f.puts(key)
+    end
+  end
+end
+
 def main
   parsed_info = parsed_info_from_meta_data(fetch_sticker_meta_data ARGV[0])
+  save_names_from_parsed_info(parsed_info, "../keywords.txt")
   download_stickers_from_parsed_info parsed_info
 end
 
