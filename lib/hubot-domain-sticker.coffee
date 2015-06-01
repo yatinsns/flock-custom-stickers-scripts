@@ -12,5 +12,7 @@
 
 module.exports = (robot) ->
   robot.respond /sticker (.*)/i, (msg) ->
-    s = spawn './sticker_generator.rb', [msg.match[1]]
-    s.stdout.on 'data', (data) -> msg.send (data)
+    exec = require('child_process').exec
+    exec "./sticker_generator.rb #{msg.match[1]}", (error, stdout, stderr) =>
+         @robot.logger.debug stderr
+         msg.send stdout
