@@ -1,13 +1,72 @@
 #! /usr/bin/env ruby
 
 require 'json'
+require 'chunky_png'
+
+TOKEN = "qtf2j8p2tje8tnqtf8pe28tt28pnejtp"
+FILE_UPLOAD_URL = "http://staging.go.to/api/filesharing/upload"
 
 def sticker_url_for_text(words)
-  random_sticker_url_with_key words.join(" ")
+  person = words[0]
+  rest_text = words[1..-1].join(" ")
+  whole_text = words.join(" ")
+
+  url = custom_url(person, rest_text)
+  url ||= random_sticker_url_with_key rest_text
+  url ||= random_sticker_url_with_key whole_text
 end
 
 def custom_url(person_name, text)
-  return nil
+  info = parsed_custom_sticker_info
+  if user_exists? person_name
+    unless info[text].nil?
+      file_path = create_custom_sticker(info[text][:image], person_name, info[text][:x], info[text][:y])
+      url = upload file_path
+    end
+  end
+  url
+end
+
+def parsed_custom_sticker_info
+  custom_stickers_file = File.new("./custom_stickers.info")
+  info = {}
+  while line = custom_stickers_file.gets
+    line = line.chomp
+    tokens = line.split(":")
+    info[tokens[0]] = {:image => tokens[1], :x => tokens[2], :y => tokens[3]}
+  end
+  custom_stickers_file.close
+  info
+end
+
+def user_exists?(user)
+  user_faces = File.new("./user_faces.info")
+  while line = user_faces.gets
+    line = line.chomp
+    if line.eql? user
+      user_faces.close
+      return true
+    end
+  end
+  user_faces.close
+  return false
+end
+
+def create_custom_sticker(sticker_name, user_name, position_x, position_y)
+  sticker = ChunkyPNG::Image.from_file("./custom-stickers/#{sticker_name}.png")
+  user  = ChunkyPNG::Image.from_file("./user-faces/#{user_name}.png")
+  sticker.compose!(user, Integer(position_x), Integer(position_y))
+  
+  path = "/tmp/custom_sticker.png"
+  sticker.save(path, :fast_rgba) 
+  path
+end
+
+def upload(file_path)
+  uuid = rand(100000)
+  response = `curl -v --form file=@"#{file_path}" "#{FILE_UPLOAD_URL}?token=#{TOKEN}&uuid=#{uuid}"`
+  response_data = JSON.parse response
+  response_data["longUrl"]
 end
 
 def random_sticker_url_with_key(key)
