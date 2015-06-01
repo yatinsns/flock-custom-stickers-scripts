@@ -28,7 +28,7 @@ def custom_url(person_name, text)
 end
 
 def parsed_custom_sticker_info
-  custom_stickers_file = File.new("./custom_stickers.info")
+  custom_stickers_file = File.new("./custom-sticker-support/custom_stickers.info")
   info = {}
   while line = custom_stickers_file.gets
     line = line.chomp
@@ -40,7 +40,7 @@ def parsed_custom_sticker_info
 end
 
 def user_exists?(user)
-  user_faces = File.new("./user_faces.info")
+  user_faces = File.new("./custom-sticker-support/user_faces.info")
   while line = user_faces.gets
     line = line.chomp
     if line.eql? user
@@ -53,8 +53,8 @@ def user_exists?(user)
 end
 
 def create_custom_sticker(sticker_name, user_name, position_x, position_y)
-  sticker = ChunkyPNG::Image.from_file("./custom-stickers/#{sticker_name}.png")
-  user  = ChunkyPNG::Image.from_file("./user-faces/#{user_name}.png")
+  sticker = ChunkyPNG::Image.from_file("./custom-sticker-support/custom-stickers/#{sticker_name}.png")
+  user  = ChunkyPNG::Image.from_file("./custom-sticker-support/user-faces/#{user_name}.png")
   sticker.compose!(user, Integer(position_x), Integer(position_y))
   
   path = "/tmp/custom_sticker.png"
@@ -70,7 +70,7 @@ def upload(file_path)
 end
 
 def random_sticker_url_with_key(key)
-  meta_data = File.read('./stickers.json')
+  meta_data = File.read('./custom-sticker-support/stickers.json')
   stickers_data = JSON.parse meta_data
   stickers_info = parsed_info_from_meta_data stickers_data
   sticker_set = stickers_info[key]  
