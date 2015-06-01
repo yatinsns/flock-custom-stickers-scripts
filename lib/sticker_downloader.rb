@@ -2,8 +2,8 @@
 require 'json'
 
 def fetch_sticker_meta_data(url)
-  meta_data = `curl #{url}`
-  JSON.parse meta_data
+  `curl #{url} > ./sticker.json`
+  #JSON.parse meta_data
 end
 
 def parsed_info_from_meta_data(meta_data)
@@ -47,18 +47,18 @@ def download_stickers_from_parsed_info(parsed_info)
   end
 end
 
-def save_names_from_parsed_info(parsed_info, path)
+def save_parsed_info(parsed_info, path)
   File.open(path, "w+") do |f|
     parsed_info.each do |key, value|
-      f.puts(key)
+      value.each { |url| f.puts("#{key}=>#{url}")}
     end
   end
 end
 
 def main
-  parsed_info = parsed_info_from_meta_data(fetch_sticker_meta_data ARGV[0])
-  save_names_from_parsed_info(parsed_info, "../keywords.txt")
-  download_stickers_from_parsed_info parsed_info
+  fetch_sticker_meta_data ARGV[0]
+  #parsed_info = parsed_info_from_meta_data(fetch_sticker_meta_data ARGV[0])
+  #save_parsed_info(parsed_info, "../sticker_info.txt")
 end
 
 main if __FILE__ == $0
