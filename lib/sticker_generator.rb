@@ -57,7 +57,7 @@ def create_custom_sticker(sticker_name, user_name, position_x, position_y)
   user  = ChunkyPNG::Image.from_file("./custom-sticker-support/user-faces/#{user_name}.png")
   sticker.compose!(user, Integer(position_x), Integer(position_y))
   
-  path = "/tmp/custom_sticker.png"
+  path = "/tmp/custom_sticker#{rand(10000)}.png"
   sticker.save(path, :fast_rgba) 
   path
 end
