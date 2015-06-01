@@ -2,8 +2,8 @@
 require 'json'
 
 def fetch_sticker_meta_data(url)
-  `curl #{url} > ./sticker.json`
-  #JSON.parse meta_data
+  meta_data = `curl #{url}`
+  JSON.parse meta_data
 end
 
 def parsed_info_from_meta_data(meta_data)
@@ -56,9 +56,10 @@ def save_parsed_info(parsed_info, path)
 end
 
 def main
-  fetch_sticker_meta_data ARGV[0]
-  #parsed_info = parsed_info_from_meta_data(fetch_sticker_meta_data ARGV[0])
+  #fetch_sticker_meta_data ARGV[0]
+  parsed_info = parsed_info_from_meta_data(fetch_sticker_meta_data ARGV[0])
   #save_parsed_info(parsed_info, "../sticker_info.txt")
+  download_stickers_from_parsed_info parsed_info
 end
 
 main if __FILE__ == $0
