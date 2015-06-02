@@ -6,7 +6,7 @@
 #   sticker_generator.rb - ruby script to create custom sticker with passed arguments
 #
 # Commands:
-#  hubot sticker <text>
+#  hubot sticker <optional-user-name> <text>
 
 { spawn } = require 'child_process'
 
