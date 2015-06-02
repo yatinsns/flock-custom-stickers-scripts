@@ -3,7 +3,7 @@
 require 'json'
 require 'chunky_png'
 
-TOKEN = "ioo226hdd71fhfhh17212ii71ddhiffa"
+TOKEN = "yixrvxlr7rduxadiix7ra7aydtaltlri"
 FILE_UPLOAD_URL = "https://fs.go.to/filesharing/upload"
 
 def sticker_url_for_text(words)
