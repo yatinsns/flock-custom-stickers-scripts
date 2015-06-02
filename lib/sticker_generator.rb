@@ -3,8 +3,8 @@
 require 'json'
 require 'chunky_png'
 
-TOKEN = "qtf2j8p2tje8tnqtf8pe28tt28pnejtp"
-FILE_UPLOAD_URL = "http://staging.go.to/api/filesharing/upload"
+TOKEN = "ioo226hdd71fhfhh17212ii71ddhiffa"
+FILE_UPLOAD_URL = "https://fs.go.to/filesharing/upload"
 
 def sticker_url_for_text(words)
   person = words[0]
